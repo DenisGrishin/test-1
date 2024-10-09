@@ -5,12 +5,11 @@
 	<title>Главная</title>
 	<meta charset="UTF-8">
 	<meta name="format-detection" content="telephone=no">
-	<!-- <style>body{opacity: 0;}</style> -->
-	<link rel="stylesheet" href="css/style.min.css?_v=20241009145238">
-	<link rel="shortcut icon" href="favicon.ico">
-	<!-- <meta name="robots" content="noindex, nofollow"> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/style.min.css?_v=20241009234554">
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -32,37 +31,37 @@
 					<span class="hour">Часы</span>:<span class="min">Минуты</span>:<span class="sec">Секунды</span>
 				</div>
 				<div id="currentDate">
-					<span>День</span>
-					<span>Месяц</span>
-					<span>День недели</span>
+
 				</div>
 				<div class="info-block__city-weather">
-					<div>Краснодар</div>
-					<div id="infoweather">
-
+					<div class="info-block__city">Краснодар</div>
+					<div class="info-block__weather" id="infoweather">
 					</div>
 				</div>
+				<div class="input-task">
+					<label class="input-task__label" for="inputTask">Какае ваши цели на сегодня?</label>
+					<input autocomplete="off" id="inputTask" type="text">
+				</div>
 			</div>
+			<div class=" tasks">
+				<div class="tasks__body">
+					<ul class="tasks__list">
 
+						<li class="tasks__item" data-id="213"><label class="tasks__label"><input class="tasks__check" type="checkbox"><span class="tasks__text">1</span></label><button class="tasks__del" type="button"><img src="img/del.svg" alt="Удалить"></button></li>
+						<li class="tasks__item" data-id="21sda3"><label class="tasks__label"><input checked class="tasks__check" type="checkbox"><span class="tasks__text">2</span></label><button class="tasks__del" type="button"><img src="img/del.svg" alt="Удалить"></button></li>
+						<li class="tasks__item" data-id="21dsad3"><label class="tasks__label"><input class="tasks__check" type="checkbox"><span class="tasks__text">3</span></label><button class="tasks__del" type="button"><img src="img/del.svg" alt="Удалить"></button></li>
+					</ul>
+					<button type="button" class="task__filter">Фильтр по выполненным задачам</button>
+					<br>
+					<button type="button" class="tasks__checked-del">Удалить выполненые задачи</button>
+				</div>
+
+			</div>
 		</main>
-		<footer class="footer">
-			<div class="footer__container">
-			</div>
-		</footer>
-	</div>
-	<!-- 
-<div id="popup" aria-hidden="true" class="popup">
-	<div class="popup__wrapper">
-		<div class="popup__content">
-			<button data-close type="button" class="popup__close">Закрыть</button>
-			<div class="popup__text">
-			</div>
-		</div>
-	</div>
-</div>
- -->
 
-	<script src="js/app.min.js?_v=20241009145238"></script>
+	</div>
+
+	<script src="js/app.min.js?_v=20241009234554"></script>
 </body>
 
 </html>

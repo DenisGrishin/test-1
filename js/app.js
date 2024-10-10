@@ -316,14 +316,6 @@
         taskBody.classList.add("_show");
       };
 
-      window.addEventListener("resize", reportWindowSize);
-
-      function reportWindowSize() {
-        console.log(document.body.clientWidth);
-        if (document.body.clientWidth < 1024) {
-        }
-      }
-
       filterTasks();
       removeCheckedTasks();
       delTask();

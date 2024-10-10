@@ -129,20 +129,27 @@
       });
     };
     // показываеи результат API
-    const setResult = (dataWeather) => {
+    const setResultWeather = (dataWeather) => {
       const infoWeather = document.getElementById("infoweather");
       const now = new Date();
       const hours = now.getHours();
-      const timeOfDay = hours >= 23 && hours < 6;
+      const timeOfDay = hours >= 21 && hours < 6;
 
       const definitionWeather = {
-        clear: `Ясный ${timeOfDay ? "Ясная ночь" : "Ясный день"}`,
-        partlyCloudy: "Переменная облачность",
+        clear: timeOfDay ? "Ясная ночь" : "Ясный день",
+        pcloudy: "Переменная облачность",
+        mcloudy: "Пасмурно",
         cloudy: "Облачно",
-        rain: "Дождь",
+        humid: "Высокая влажность",
+        lightrain: "Мелкий дождь, облочно",
+        oshower: "Мелкий дождь, частично облочно",
+        ishower: "Мелкий дождь, преимущественно ясно",
+        lightsnow: "Небольшой снег",
+        rain: "Дождь ",
         snow: "Снег",
-        thunderstorm: "Гроза ",
-        thunderstormWithRain: "Гроза с дождем",
+        rainsnow: "Дождь со снегом",
+        ts: "Мелкий дождь,вероятно гроза",
+        tsrain: "Дождь, с грозой",
       };
 
       if (infoWeather) {
@@ -151,7 +158,7 @@
     };
 
     // получаем данные погоды
-    const getWeatherCity = () => {
+    const getWeather = () => {
       const lon = localStorage.getItem("longitudea") || "38.59";
       const lat = localStorage.getItem("latitudea") || "45.02";
       const infoWeather = document.getElementById("infoweather");
@@ -166,7 +173,7 @@
           }
         })
         .then((data) => {
-          setResult(data.dataseries);
+          setResultWeather(data.dataseries);
           infoWeather.classList.remove("_preloader");
         })
         .catch((err) => {
@@ -178,19 +185,23 @@
     const initTodo = () => {
       const input = document.getElementById("inputTask");
       const labaleInput = document.querySelector(".input-task__label");
-      let listTask = document.querySelector(".tasks__list");
+      let listTask = document.querySelector(".todo__list");
+      const taskBody = document.querySelector(".todo__body");
 
-      // получаем Value
-      const getValueInput = () => {
+      // получаем Value c input
+      const addTask = () => {
         if (input) {
           input.addEventListener("keyup", (e) => {
             toggleError("#fff", "Какае ваши цели на сегодня?");
 
             if (input.value === "" && e.key === "Enter") {
               toggleError("red", "Напишите задачу");
+
               return;
             }
             if (e.key === "Enter") {
+              tasksListHieht();
+
               createTask(input.value.trim());
               input.value = "";
             }
@@ -210,25 +221,28 @@
         if (listTask) {
           listTask.insertAdjacentHTML(
             "beforeend",
-            `<li class="tasks__item" data-id="${randomId}"><label class="tasks__label"><input class="tasks__check" type="checkbox"><span
-									class="tasks__text">${value}</span></label><button class="tasks__del" type="button"><img
+            `<li class="todo__item" data-id="${randomId}"><label class="todo__label"><input class="todo__check" type="checkbox"><span
+									class="todo__text">${value}</span></label><button class="todo__del" type="button"><img
 									src="img/del.svg" alt="Удалить"></button></li>`,
           );
+          toggleTasksList();
         }
       }
       // удалить задачу
       function delTask() {
-        if (document.querySelectorAll(".tasks__item")) {
+        if (document.querySelectorAll(".todo__item")) {
           listTask.addEventListener("click", (e) => {
             let target = e.target;
 
-            if (target.closest(".tasks__del")) {
+            if (target.closest(".todo__del")) {
               let idTask =
-                target.closest(".tasks__del").parentElement.dataset.id;
+                target.closest(".todo__del").parentElement.dataset.id;
 
-              document.querySelectorAll(".tasks__item").forEach((task) => {
+              document.querySelectorAll(".todo__item").forEach((task) => {
                 if (idTask === task.dataset.id) {
                   listTask.removeChild(task);
+                  tasksListHieht();
+                  toggleTasksList();
                 }
               });
             }
@@ -237,14 +251,16 @@
       }
       // удалить выполненные задачи
       const removeCheckedTasks = () => {
-        const btnRemoveCheckeds = document.querySelector(".tasks__checked-del");
-        if (document.querySelectorAll(".tasks__item")) {
+        const btnRemoveCheckeds = document.querySelector(".todo__checked-del");
+        if (document.querySelectorAll(".todo__item")) {
           btnRemoveCheckeds.addEventListener("click", function (e) {
-            const tasks = document.querySelectorAll(".tasks__item");
+            const tasks = document.querySelectorAll(".todo__item");
 
             tasks.forEach((task) => {
-              if (task.querySelector(".tasks__check").checked) {
+              if (task.querySelector(".todo__check").checked) {
                 listTask.removeChild(task);
+                tasksListHieht();
+                toggleTasksList();
               }
             });
           });
@@ -252,10 +268,10 @@
       };
       // фильтра задач
       const filterTasks = () => {
-        const btnFilter = document.querySelector(".tasks__filter");
+        const btnFilter = document.querySelector(".todo__filter");
         if (btnFilter) {
           btnFilter.addEventListener("click", function (e) {
-            const tasks = document.querySelectorAll(".tasks__item");
+            const tasks = document.querySelectorAll(".todo__item");
 
             let checekdTasks = [];
             let notChecekdTasks = [];
@@ -263,7 +279,7 @@
             for (let i = 0; i < tasks.length; i++) {
               const task = tasks[i];
 
-              if (task.querySelector(".tasks__check").checked) {
+              if (task.querySelector(".todo__check").checked) {
                 checekdTasks.push(task);
               } else {
                 notChecekdTasks.push(task);
@@ -278,18 +294,47 @@
           });
         }
       };
+      // регултрует высоту  списка, от кол-во задач
+      const tasksListHieht = () => {
+        if (taskBody.offsetHeight >= window.innerHeight - 50) {
+          listTask.style.overFlowY = "auto";
+          listTask.style.maxHeight = window.innerHeight - 213 + "px";
+          return;
+        }
+
+        listTask.style.minHeight = 100 + "%";
+        const heightList = listTask.offsetHeight;
+
+        listTask.style.minHeight = heightList + "px";
+      };
+      // скрыть/показать список задач
+      const toggleTasksList = () => {
+        if (listTask.children.length === 0) {
+          taskBody.classList.remove("_show");
+          return;
+        }
+        taskBody.classList.add("_show");
+      };
+
+      window.addEventListener("resize", reportWindowSize);
+
+      function reportWindowSize() {
+        console.log(document.body.clientWidth);
+        if (document.body.clientWidth < 1024) {
+        }
+      }
 
       filterTasks();
       removeCheckedTasks();
       delTask();
-      getValueInput();
+      addTask();
     };
 
     initTodo();
     initDate();
     initOclock();
     getGeoLocation();
-    getWeatherCity();
+    getWeather();
   }); // ./src/js/app.js
 
   //============================================================================================================================================================================================================================================

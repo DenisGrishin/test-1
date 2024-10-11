@@ -120,7 +120,6 @@
             );
 
             const { city } = await res.json();
-            debugger;
             document.querySelector(".info-block__city").textContent = city;
           } catch (error) {
             console.error(error);

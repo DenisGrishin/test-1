@@ -121,7 +121,8 @@
 
             const { city } = await res.json();
 
-            document.querySelector(".info-block__city").textContent = city;
+            document.querySelector(".info-block__city").innerText = city;
+            debugger;
           } catch (error) {
             console.error(error);
           }

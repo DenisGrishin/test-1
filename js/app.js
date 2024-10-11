@@ -165,7 +165,7 @@
       infoWeather.classList.add("_preloader");
 
       fetch(
-        `http://www.7timer.info/bin/api.pl?lon=${lon}&lat=${lat}&product=civillight&output=json`,
+        `https://www.7timer.info/bin/api.pl?lon=${lon}&lat=${lat}&product=civillight&output=json`,
       )
         .then((response) => {
           if (response.ok) {

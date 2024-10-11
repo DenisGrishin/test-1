@@ -120,8 +120,8 @@
             );
 
             const { city } = await res.json();
-
-            document.querySelector(".info-block__city").innerText = city;
+            debugger;
+            document.querySelector(".info-block__city").textContent = city;
           } catch (error) {
             console.error(error);
           }
@@ -134,7 +134,7 @@
       const now = new Date();
       const hours = now.getHours();
       const timeOfDay = hours >= 21 && hours > 6;
-      debugger;
+
       const definitionWeather = {
         clear: timeOfDay ? "Ясная ночь" : "Ясный день",
         pcloudy: "Переменная облачность",
